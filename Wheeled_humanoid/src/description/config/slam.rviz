@@ -1,0 +1,43 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Views
+    Name: Views
+  - Class: nav2_rviz_plugins/Navigation  # Fixed class name
+    Name: Navigation 2
+
+  
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Description Topic: robot_description
+    - Class: rviz_default_plugins/LaserScan
+      Enabled: true
+      Topic: /scan
+    - Class: rviz_default_plugins/Map
+      Enabled: true
+      Name: Full Map
+      Topic: /map
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+  Global Options:
+    Fixed Frame: map
+
+  Tool Manager:
+    Active Tool: rviz_default_plugins/Interact
+    Tools:
+      - Class: rviz_default_plugins/Interact
+      - Class: rviz_default_plugins/MoveCamera
+      - Class: rviz_default_plugins/Select
+      - Class: rviz_default_plugins/FocusCamera
+      - Class: rviz_default_plugins/Measure
+      - Class: nav2_rviz_plugins/PoseEstimateTool  # Fixed: Standard Humble Pose Tool
+      - Class: nav2_rviz_plugins/GoalTool          # Fixed: Standard Humble Goal Tool
+      - Class: rviz_default_plugins/Orbit # Added: rotate around scene
+      - Class: rviz_default_plugins/Zoom # Added: zoom in/out
+      - Class: nav2_rviz_plugins/PoseEstimateTool # Standard Humble Pose Tool
+      - Class: nav2_rviz_plugins/GoalTool # Standard Humble Goal Tool 

@@ -1,0 +1,77 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Views
+    Name: Views
+  - Class: nav2_rviz_plugins/Navigation2  # Fixed class name
+    Name: Navigation 2
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Map
+      Name: Map
+      Topic: /map
+      Enabled: true
+      Alpha: 0.7
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Enabled: true
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Topic: /scan
+      Enabled: true
+      Size (m): 0.05
+    - Class: rviz_default_plugins/Path
+      Name: GlobalPlan
+      Topic: /plan
+      Enabled: true
+    - Class: rviz_default_plugins/Path
+      Name: LocalPlan
+      Topic: /local_plan
+      Enabled: true
+    - Class: rviz_default_plugins/Map
+      Name: GlobalCostmap
+      Topic: /global_costmap/costmap
+      Enabled: true
+    - Class: rviz_default_plugins/Map
+      Name: LocalCostmap
+      Topic: /local_costmap/costmap
+      Enabled: true
+    - Class: rviz_default_plugins/Pose
+      Name: RobotPose
+      Topic: /amcl_pose
+      Enabled: true
+      Shape: Arrow
+      Color: 255; 0; 0
+      Head Radius: 0.1
+      Head Length: 0.2
+      Shaft Radius: 0.05
+    - Class: rviz_default_plugins/PoseArray
+      Name: ParticleCloud
+      Topic: /particlecloud
+      Enabled: true
+      Color: 0; 255; 0
+
+  Global Options:
+    Fixed Frame: map
+
+  Tool Manager:
+    Active Tool: rviz_default_plugins/Interact
+    Tools:
+      - Class: rviz_default_plugins/Interact
+      - Class: rviz_default_plugins/MoveCamera
+      - Class: rviz_default_plugins/Select
+      - Class: rviz_default_plugins/FocusCamera
+      - Class: rviz_default_plugins/Measure
+      - Class: nav2_rviz_plugins/PoseEstimateTool  # Fixed: Standard Humble Pose Tool
+      - Class: nav2_rviz_plugins/GoalTool          # Fixed: Standard Humble Goal Tool
+      - Class: rviz_default_plugins/Orbit # Added: rotate around scene
+      - Class: rviz_default_plugins/Zoom # Added: zoom in/out
+      - Class: nav2_rviz_plugins/PoseEstimateTool # Standard Humble Pose Tool
+      - Class: nav2_rviz_plugins/GoalTool # Standard Humble Goal Tool 

@@ -1,0 +1,26 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- ================== HEAD ================== -->
+
+  <link name="head_link">
+    <visual>
+      <geometry>
+        <sphere radius="0.12"/>
+      </geometry>
+      <origin xyz="0 0 0.12"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.12"/>
+      </geometry>
+      <origin xyz="0 0 0.12"/>      
+    </collision>
+
+    <xacro:cylinder_inertial mass="1" r="0.12" h="0.05"/>
+  </link>
+
+  <joint name="head_joint" type="fixed">
+    <parent link="torso_link"/>
+    <child link="head_link"/>
+    <origin xyz="0 0 0.50"/>
+  </joint>
+</robot>

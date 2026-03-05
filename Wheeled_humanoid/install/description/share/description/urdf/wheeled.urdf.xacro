@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<robot name="wheeled_humanoid" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="inertial_macros.xacro"/>
+  <xacro:include filename="base.xacro"/>
+  <xacro:include filename="wheels.xacro"/>
+  <!--xacro:include filename="torso.xacro"/>
+  <xacro:include filename="head.xacro"/>
+  <xacro:include filename="arms.xacro"/-->
+  <xacro:include filename="sensors.xacro"/>
+
+  <gazebo reference="rear_left_wheel">
+	  <mu1>0.2</mu1>
+	  <mu2>0.2</mu2>
+  </gazebo>
+
+  <gazebo reference="rear_right_wheel">
+          <mu1>0.2</mu1>
+          <mu2>0.2</mu2>
+  </gazebo>
+
+  <gazebo reference="front_right_wheel">
+          <mu1>0.02</mu1>
+          <mu2>0.02</mu2>
+  </gazebo>
+
+  <gazebo reference="front_left_wheel">
+          <mu1>0.02</mu1>
+          <mu2>0.02</mu2>
+  </gazebo>
+
+
+  <gazebo>
+        <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+                 <ros>
+                        <namespace>/</namespace>
+                        <argument>--ros-args --remap __node:=diff_drive_wheeled</argument>
+                        <remapping>cmd_vel:=/cmd_vel</remapping>
+                        <remapping>odom:=/odom</remapping>
+                </ros>
+
+                <!-- Wheel Information -->
+                <left_joint>rear_left_wheel_joint</left_joint>
+                <right_joint>rear_right_wheel_joint</right_joint>
+                <wheel_separation>0.44</wheel_separation>
+                <wheel_diameter>0.1</wheel_diameter>
+
+
+                <!-- Limits -->
+                <max_wheel_torque>200</max_wheel_torque>
+                <max_wheel_acceleration>200</max_wheel_acceleration>
+
+                <!-- Output -->
+                <odometry_frame>odom</odometry_frame>
+                <odometry_topic>odom</odometry_topic>
+                <robot_base_frame>base_link</robot_base_frame>
+                <cmd_vel_topic>cmd_vel</cmd_vel_topic>
+
+                <publish_odom>true</publish_odom>
+                <publish_odom_tf>true</publish_odom_tf>
+                <publish_wheel_tf>true</publish_wheel_tf>
+                <publish_wheel_joint_state>true</publish_wheel_joint_state>
+        </plugin>
+  </gazebo>
+</robot>

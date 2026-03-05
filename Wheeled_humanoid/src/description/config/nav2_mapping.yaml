@@ -1,0 +1,170 @@
+planner_server:
+  ros__parameters:
+    transform_tolerance: 0.5
+    tf_buffer_duration: 30.0
+    use_sim_time: True
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner/NavfnPlanner"
+      tolerance: 0.5
+
+controller_server:
+  ros__parameters:
+    use_sim_time: True
+    controller_frequency: 12.0  # Lowered to 5Hz to match CPU capability without triggering timeouts
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.0
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 1.0  # Massive increase: wait 5 seconds before aborting when blocked
+    progress_checker_plugin: "progress_checker"
+    goal_checker_plugins: ["general_goal_checker"]
+    controller_plugins: ["FollowPath"]
+
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.02  # Reduced threshold to allow standing rotations
+      movement_time_allowance: 1.0
+
+    general_goal_checker:
+      stateful: True
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.8  # Loosened for much faster goal completion
+      yaw_goal_tolerance: 0.8
+
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: True
+      max_vel_x: 0.5  # Increased for faster movement
+      min_vel_x: 0.0  # Disable backward movement
+      max_vel_y: 0.0
+      min_vel_y: 0.0
+      max_vel_theta: 1.2  # Slower rotation speed to let controller finely search around walls
+      max_speed_xy: 0.5   
+      min_speed_theta: 0.0  # Must be zero to allow standing still before rotating
+      acc_lim_x: 2.5
+      acc_lim_y: 0.0
+      acc_lim_theta: 4.0
+      decel_lim_x: -3.0   # Fast braking
+      decel_lim_y: 0.0
+      decel_lim_theta: -4.0
+      vx_samples: 18      # More samples for better dynamic obstacle avoidance
+      vy_samples: 1
+      vtheta_samples: 40
+      sim_time: 1.2       # Simulate further ahead for bolder swerving path generation
+      linear_granularity: 0.1  
+      angular_granularity: 0.1  
+      transform_tolerance: 1.0  
+      xy_goal_tolerance: 0.4  
+      short_circuit_trajectory_evaluation: True
+      stateful: True
+      prune_distance: 1.0  # Prune points 1m behind robot
+      PathAlign.scale: 32.0
+      PathAlign.forward_point_distance: 0.1
+      GoalAlign.scale: 8.0  # Massively lowered so robot doesn't care if its nose swings left/right during a curve
+      GoalAlign.forward_point_distance: 0.1
+      PathDist.scale: 40.0
+      GoalDist.scale: 10.0
+      RotateToGoal.slowing_factor: 3.0
+      RotateToGoal.lookahead_time: 0.5
+      critics:
+        - BaseObstacle
+        - ObstacleFootprint
+        - Oscillation
+        - PathAlign
+        - PathDist
+        - GoalAlign
+        - GoalDist
+        - RotateToGoal
+
+      BaseObstacle.scale: 30.0
+      ObstacleFootprint.scale: 2.0
+      RotateToGoal.scale: 15.0
+      Oscillation.scale: 8.0
+
+      min_vel_theta: 0.3
+      trans_stopped_velocity: 0.02
+      vtheta_samples: 60
+
+
+bt_navigator:
+  ros__parameters:
+    use_sim_time: True
+    # Default behavior trees for navigation
+    default_bt_xml_filename: "/opt/ros/humble/share/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+    default_nav_through_poses_bt_xml: "/opt/ros/humble/share/nav2_bt_navigator/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
+    transform_tolerance: 10.0  # Increased to tolerate large time discrepancies
+    global_frame: map
+    robot_base_frame: base_link # Changed to base_link for better compatibility with costmaps
+    odom_topic: /odom
+    bt_loop_duration: 10  # Reduced to 10ms for instant reaction times
+    enable_groot_monitoring: True
+    
+
+local_costmap:
+  ros__parameters:
+    use_sim_time: True
+    transform_tolerance: 5.0
+    global_frame: odom
+    robot_base_frame: base_link
+    update_frequency: 10.0
+    publish_frequency: 10.0
+    width: 3
+    height: 3
+    resolution: 0.05
+    rolling_window: True
+    footprint: "[ [0.25, 0.225], [0.25, -0.225], [-0.25, -0.225], [-0.25, 0.225] ]"
+    plugins: ["obstacle_layer", "inflation_layer"]
+    obstacle_layer:
+      plugin: "nav2_costmap_2d::ObstacleLayer"
+      enabled: True
+      observation_sources: scan
+      scan:
+        topic: /scan
+        max_obstacle_height: 2.0
+        clearing: True
+        marking: True
+    inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        enabled: True
+        inflation_radius: 0.25 # Slightly reduced for better local maneuvering
+        cost_scaling_factor: 3.0
+
+global_costmap:
+  ros__parameters:
+    use_sim_time: True
+    global_frame: map
+    robot_base_frame: base_link
+    update_frequency: 2.0
+    publish_frequency: 2.0
+
+    # Increase this to handle simulation lag
+    transform_tolerance: 1.0
+    rolling_window: false
+    track_unknown_space: true
+    tf_buffer_duration: 20.0
+
+    # This forces the map to publish even if the robot hasn't moved much
+    always_send_full_costmap: true
+    resolution: 0.05
+    footprint: "[ [0.25, 0.225], [0.25, -0.225], [-0.25, -0.225], [-0.25, 0.225] ]"
+    plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+    static_layer:
+      plugin: "nav2_costmap_2d::StaticLayer"
+      map_subscribe_transient_local: True
+      enabled: True
+      map_topic: "/map"
+    obstacle_layer:
+      plugin: "nav2_costmap_2d::ObstacleLayer"
+      enabled: True
+      observation_sources: scan
+      scan:
+        topic: /scan
+        transform_tolerance: 0.3
+        max_obstacle_height: 2.0
+        clearing: True
+        marking: True
+    inflation_layer:
+      plugin: "nav2_costmap_2d::InflationLayer"
+      enabled: True
+      inflation_radius: 0.25 # Slightly increased for safety
+      cost_scaling_factor: 2.0 

@@ -1,0 +1,9 @@
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/uninstall.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/description_uninstall.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/test.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/edit_cache.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/rebuild_cache.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/list_install_components.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/install.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/install/local.dir
+/home/dawit/Desktop/Robot/Wheeled_humanoid/build/description/CMakeFiles/install/strip.dir

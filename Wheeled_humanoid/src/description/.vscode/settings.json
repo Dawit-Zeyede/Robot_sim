@@ -1,0 +1,15 @@
+{
+    "ROS2.distro": "humble",
+    "python.autoComplete.extraPaths": [
+        "/home/dawit/Desktop/Robot/myTalker/install/myTalker/lib/python3.10/site-packages",
+        "/home/dawit/Desktop/Robot/simpleLidarTest/install/robot_flow/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/dawit/Desktop/Robot/myTalker/install/myTalker/lib/python3.10/site-packages",
+        "/home/dawit/Desktop/Robot/simpleLidarTest/install/robot_flow/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
